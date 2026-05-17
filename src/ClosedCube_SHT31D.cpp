@@ -407,7 +407,10 @@ SHT31D_ErrorCode ClosedCube_SHT31D::read(uint16_t* data, uint8_t numOfPair)
 	const uint8_t numOfBytes = numOfPair * 3;
 
 	Wire.beginTransmission(_address);
-	Wire.requestFrom(_address, numOfBytes);
+	if (Wire.requestFrom(_address, numOfBytes) != numOfBytes) {
+		Wire.endTransmission();
+		return WIRE_I2C_RECEIVED_NACK_ON_DATA;
+	}
 
 	int counter = 0;
 	while (Wire.available() < numOfBytes)
