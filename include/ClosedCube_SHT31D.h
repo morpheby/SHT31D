@@ -35,7 +35,7 @@ THE SOFTWARE.
 #ifndef CLOSEDCUBE_SHT31D
 #define CLOSEDCUBE_SHT31D
 
-#include "application.h"
+#include <cstdint>
 
 namespace SHT31D_CC {
 
@@ -190,7 +190,6 @@ namespace SHT31D_CC {
 
 	private:
 		uint8_t _address;
-		SHT31D_RegisterStatus _status;
 
 		SHT31D_ErrorCode writeCommand(SHT31D_Commands command);
 		SHT31D_ErrorCode writeAlertData(SHT31D_Commands command, float temperature, float humidity);

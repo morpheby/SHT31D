@@ -31,7 +31,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 */
-#include <Particle.h>
+
+#include "Arduino.h"
+#include "Wire.h"
 #include "ClosedCube_SHT31D.h"
 
 using namespace SHT31D_CC;
@@ -54,7 +56,7 @@ SHT31D ClosedCube_SHT31D::periodicFetchData()
 	if (error == NO_ERROR)
 		return readTemperatureAndHumidity();
 	else
-		returnError(error);
+		return returnError(error);
 }
 
 SHT31D_ErrorCode ClosedCube_SHT31D::periodicStop() {
@@ -168,7 +170,6 @@ SHT31D ClosedCube_SHT31D::readTempAndHumidity(SHT31D_Repeatability repeatability
 SHT31D ClosedCube_SHT31D::readTempAndHumidityClockStretch(SHT31D_Repeatability repeatability)
 {
 	SHT31D_ErrorCode error = NO_ERROR;
-	SHT31D_Commands command;
 
 	switch (repeatability)
 	{
@@ -199,7 +200,6 @@ SHT31D ClosedCube_SHT31D::readTempAndHumidityClockStretch(SHT31D_Repeatability r
 SHT31D ClosedCube_SHT31D::readTempAndHumidityPolling(SHT31D_Repeatability repeatability, uint8_t timeout)
 {
 	SHT31D_ErrorCode error = NO_ERROR;
-	SHT31D_Commands command;
 
 	switch (repeatability)
 	{
@@ -263,7 +263,7 @@ SHT31D_ErrorCode ClosedCube_SHT31D::writeAlertData(SHT31D_Commands command, floa
 {
 	SHT31D_ErrorCode  error;
 
-	if ((humidity < 0.0) || (humidity > 100.0) || (temperature < -40.0) || (temperature > 125.0))
+	if ((humidity < 0.0f) || (humidity > 100.0f) || (temperature < -40.0f) || (temperature > 125.0f))
 	{
 		error = PARAM_WRONG_ALERT;
 	}
@@ -363,8 +363,7 @@ SHT31D ClosedCube_SHT31D::readTemperatureAndHumidity()
 	SHT31D_ErrorCode error;
 	uint16_t buf[2];
 
-	if (error == NO_ERROR)
-		error = read(buf, 2);
+	error = read(buf, 2);
 
 	if (error == NO_ERROR) {
 		result.t = calculateTemperature(buf[0]);
