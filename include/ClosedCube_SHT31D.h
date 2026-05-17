@@ -41,6 +41,7 @@ namespace SHT31D_CC {
 
 	typedef enum {
 		CMD_READ_SERIAL_NUMBER = 0x3780,
+		CMD_READ_SERIAL_NUMBER_NO_STRETCH = 0x3682,
 
 		CMD_READ_STATUS = 0xF32D,
 		CMD_CLEAR_STATUS = 0x3041,
@@ -169,7 +170,7 @@ namespace SHT31D_CC {
 
 		SHT31D_ErrorCode artEnable();
 
-		uint32_t readSerialNumber();
+		SHT31D_ErrorCode readSerialNumber(uint32_t *serialNumber, bool clockStretch = true);
 
 		SHT31D readTempAndHumidity(SHT31D_Repeatability repeatability, SHT31D_Mode mode, uint8_t timeout);
 		SHT31D readTempAndHumidityClockStretch(SHT31D_Repeatability repeatability);

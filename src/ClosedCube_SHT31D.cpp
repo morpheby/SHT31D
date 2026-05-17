@@ -323,18 +323,23 @@ SHT31D_ErrorCode ClosedCube_SHT31D::artEnable() {
 }
 
 
-uint32_t ClosedCube_SHT31D::readSerialNumber()
+SHT31D_ErrorCode ClosedCube_SHT31D::readSerialNumber(uint32_t *serialNumber, bool clockStretch)
 {
-	uint32_t result = NO_ERROR;
 	uint16_t buf[2];
+	SHT31D_ErrorCode error;
 
-	if (writeCommand(CMD_READ_SERIAL_NUMBER) == NO_ERROR) {
-		if (read(buf, 2) == NO_ERROR) {
-			result = (buf[0] << 16) | buf[1];
+	error = writeCommand(clockStretch ? CMD_READ_SERIAL_NUMBER : CMD_READ_SERIAL_NUMBER_NO_STRETCH);
+
+	if (error == NO_ERROR) {
+		if (!clockStretch)
+			delay(2);
+		error = read(buf, 2);
+		if (error == NO_ERROR) {
+			*serialNumber = (buf[0] << 16) | buf[1];
 		}
 	}
 
-	return result;
+	return error;
 }
 
 SHT31D_RegisterStatus ClosedCube_SHT31D::readStatusRegister()
